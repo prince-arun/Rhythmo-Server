@@ -9,7 +9,7 @@ const dbConfig = require("./config/dbConfig");
 
 //-------------------------------------------
 const corsOptions = {
-  origin: "https://rhythmo-mern-frontend-lg30cxnac-prince-arun.vercel.app",
+  origin: "https://rhythmo-mern-frontend-9p00p9md3-prince-arun.vercel.app",
 };
 app.use(cors(corsOptions));
 
