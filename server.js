@@ -7,7 +7,13 @@ const path = require("path");
 require("dotenv").config();
 const dbConfig = require("./config/dbConfig");
 app.use(express.json());
-app.use(cors());
+//-------------------------------------------
+const corsOptions = {
+  origin: "https://rhythmo-mern-frontend-lg30cxnac-prince-arun.vercel.app",
+};
+app.use(cors(corsOptions));
+
+//------------------------------------------
 const userRoute = require("./routes/userRoute");
 const songsRoute = require("./routes/songsRoute");
 const adminRoute = require("./routes/adminRoute");
