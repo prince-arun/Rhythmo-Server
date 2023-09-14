@@ -69,7 +69,7 @@ router.post(
       let response = null;
       if (req.file) {
         response = await cloudinary.v2.uploader.upload(req.file.path, {
-          folder: "sheymusic-udmey",
+          folder: "rhythmo-music",
           use_filename: true,
           resource_type: "raw",
         });
