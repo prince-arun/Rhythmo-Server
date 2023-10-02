@@ -6,26 +6,82 @@ const jwt = require("jsonwebtoken");
 const authMiddleWare = require("../middlewares/authMiddleware");
 const authMiddleware = require("../middlewares/authMiddleware");
 
+// router.post("/register", async (req, res) => {
+//   try {
+
+//     const password = req.body.password;
+//     const salt = await bcrypt.genSaltSync(10);
+//     const hashedPassword = await bcrypt.hashSync(password, salt);
+//     req.body.password = hashedPassword;
+//     const user = new User(req.body);
+//     const existingUser = await User.findOne({ email: req.body.email });
+//     if (existingUser) {
+//       return res
+//         .status(200)
+//         .send({ message: "User already exists", success: false });
+//     } else {
+//       await user.save();
+//       return res
+//         .status(200)
+//         .send({ message: "User registered successfully", success: true });
+//     }
+//   } catch (error) {
+//     return res.status(500).send({ message: error.message, success: false });
+//   }
+// });
 router.post("/register", async (req, res) => {
   try {
-    const password = req.body.password;
+    const { name, email, password, age, country, gender, agreeToTerms } =
+      req.body;
+
+    // Validate the new fields as needed
+    if (
+      !name ||
+      !email ||
+      !password ||
+      !age ||
+      !country ||
+      !gender ||
+      !agreeToTerms
+    ) {
+      return res.status(400).send({
+        message: "Please fill in all required fields",
+        success: false,
+      });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).send({
+        message: "User already exists",
+        success: false,
+      });
+    }
+
     const salt = await bcrypt.genSaltSync(10);
     const hashedPassword = await bcrypt.hashSync(password, salt);
-    req.body.password = hashedPassword;
-    const user = new User(req.body);
-    const existingUser = await User.findOne({ email: req.body.email });
-    if (existingUser) {
-      return res
-        .status(200)
-        .send({ message: "User already exists", success: false });
-    } else {
-      await user.save();
-      return res
-        .status(200)
-        .send({ message: "User registered successfully", success: true });
-    }
+
+    const user = new User({
+      name,
+      email,
+      password: hashedPassword,
+      age,
+      country,
+      gender,
+      agreeToTerms,
+    });
+
+    await user.save();
+
+    return res.status(201).send({
+      message: "User registered successfully",
+      success: true,
+    });
   } catch (error) {
-    return res.status(500).send({ message: error.message, success: false });
+    return res.status(500).send({
+      message: "Registration failed. Please try again later.",
+      success: false,
+    });
   }
 });
 
